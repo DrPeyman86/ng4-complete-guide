@@ -6,25 +6,15 @@
 <hr>
 <div class="row">
   <div class="col-xs-12">
-    <a href="#" class="list-group-item clearfix" 
-    *ngFor="let recipe of recipes">
-      <div class="pull-left">
-        <h4 class="list-group-item-heading">{{ recipe.name }}</h4>
-        <p class="list-group-item-text">{{ recipe.description }}</p>
-      </div>
-      <span class="pull-right">
-        <!--the src attribute is an example of normal string interpolation
-        or you can do property binding directly on the attribute.
-        property binding is better looking cleaner-->
-        <!--src="{{ recipe.imagePath }}"<<<this is normal string interpolation-->
-        <img 
-        [src]="recipe.imagePath" 
-        alt="{{ recipe.name }}" 
-        class="img-responsive" 
-        style="max-height: 50px;">
-      </span>
-    </a>
-      <app-recipe-item></app-recipe-item>
+
+      <!--bind the recipeEl item of the recipes array to the recipe property of the selector. So that inside the component that renders this selector recipe-item, you can use recipe property with @Input() and get each iterations' values that way-->
+      <app-recipe-item
+        *ngFor="let recipeEl of recipes"
+        [recipe]="recipeEl"
+        (recipeSelected)="onRecipeSelected(recipeEl)"
+        ></app-recipe-item>
+        <!--listening to recipeSelected event from recipe-item.component. When it is triggered, execute method called onRecipeSelected() passing the recipeEl which is the object of the iteration from the app-recipe-item component.
+        so you are passing the info of the iteration's data to the onRecipeSelected() method.-->
   </div>
 </div>
 

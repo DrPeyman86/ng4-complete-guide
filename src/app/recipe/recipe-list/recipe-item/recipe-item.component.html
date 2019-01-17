@@ -1,3 +1,20 @@
-<p>
-  recipe-item works!
-</p>
+
+<!--when this link is clicked execute a method called onSelected() in this component. Go to this component.ts to see onSelected();-->
+<a href="#" class="list-group-item clearfix"
+  (click)="onSelected()">
+  <div class="pull-left">
+    <h4 class="list-group-item-heading">{{ recipe.name }}</h4>
+    <p class="list-group-item-text">{{ recipe.description }}</p>
+  </div>
+  <span class="pull-right">
+    <!--the src attribute is an example of normal string interpolation
+    or you can do property binding directly on the attribute.
+    property binding is better looking cleaner-->
+    <!--src="{{ recipe.imagePath }}"<<<this is normal string interpolation-->
+    <img
+    [src]="recipe.imagePath"
+    alt="{{ recipe.name }}"
+    class="img-responsive"
+    style="max-height: 50px;">
+  </span>
+</a>

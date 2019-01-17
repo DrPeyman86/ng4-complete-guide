@@ -1,9 +1,21 @@
 <div class="row">
   <div class="col-md-5">
-    <app-recipe-list></app-recipe-list>
+    <!-- you can also just set a property here called selectedRecipe to the object coming in $event, if you don't want to neccessarily call a method when that event (recipeWasSelected) was triggered.
+    generally, you should always call a method just to be more clear-->
+    <!--listen to the recipeWasSelected event and set a object inside this component called selectedRecipe to the $event object which is the Recipe object-->
+    <app-recipe-list (recipeWasSelected)="selectedRecipe = $event"></app-recipe-list>
   </div>
   <div class="col-md-7">
-    <app-recipe-detail></app-recipe-detail>
+    <!--if selectedRecipe is empty from above, it will return false, which is why the *ngIf is for. Else it will show you a local reference called infoText, which is being set in the ng-template.
+    if selectedRecipe is set, then set the Recipe property of the recipe-details component to whatever selectedRecipe object comes in from app-recipe-list and that's where recipe-details.component will get its values from -->
+    <app-recipe-detail
+      *ngIf="selectedRecipe; else infoText"
+      [recipe]="selectedRecipe">
+    </app-recipe-detail>
+    <ng-template #infoText>
+      <p>Please select a Recipe!</p>
+    </ng-template>
+
   </div>
-  
+
 </div>
