@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 import { Recipe } from '../../recipes.model';
+import { RecipeService } from '../../recipe.service';
 
 
 @Component({
@@ -13,14 +14,16 @@ export class RecipeItemComponent implements OnInit {
   //the event will have not arguments passed along, so you put void
   @Output() recipeSelected = new EventEmitter<void>();
 
-  constructor() { }
+  constructor(private recipeService: RecipeService) { }
 
   ngOnInit() {
   }
 
   onSelected() {
     //method called when the link element is clicked. Trigger an event called recipeSelected for the parent component of this component will listen to. Parent component is recipe-list.component. go there to see this event being listened to
-    this.recipeSelected.emit();
+    //this.recipeSelected.emit();
+    //section 10 adding services
+    this.recipeService.recipeSelected.emit(this.recipe);//use the service to emit an event instead of emitting an event from this component back to the parent component.
   }
 
 }

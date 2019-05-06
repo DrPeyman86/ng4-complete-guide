@@ -8,13 +8,18 @@
   <div class="col-xs-12">
 
       <!--bind the recipeEl item of the recipes array to the recipe property of the selector. So that inside the component that renders this selector recipe-item, you can use recipe property with @Input() and get each iterations' values that way-->
-      <app-recipe-item
+      <!-- <app-recipe-item
         *ngFor="let recipeEl of recipes"
         [recipe]="recipeEl"
         (recipeSelected)="onRecipeSelected(recipeEl)"
-        ></app-recipe-item>
+      ></app-recipe-item> -->
         <!--listening to recipeSelected event from recipe-item.component. When it is triggered, execute method called onRecipeSelected() passing the recipeEl which is the object of the iteration from the app-recipe-item component.
         so you are passing the info of the iteration's data to the onRecipeSelected() method.-->
+      <!--Section 10 adding services to the components -->
+      <app-recipe-item
+        *ngFor="let recipeEl of recipes"
+        [recipe]="recipeEl"
+      ></app-recipe-item>
   </div>
 </div>
 
