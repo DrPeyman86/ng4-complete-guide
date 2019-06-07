@@ -6,11 +6,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'ng4-complete-guide';
-  loadedFeature = 'recipe';//by default load the recipe feature page
+  //do not need this after adding routing. 
+  // title = 'ng4-complete-guide';
+  // loadedFeature = 'recipe';//by default load the recipe feature page
 
-  onNavigate(feature: string) {
-    this.loadedFeature = feature;
-  }
+  // onNavigate(feature: string) {
+  //   this.loadedFeature = feature;
+  // }
 
 }

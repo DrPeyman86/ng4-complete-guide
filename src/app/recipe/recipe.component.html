@@ -10,14 +10,15 @@
   <div class="col-md-7">
     <!--if selectedRecipe is empty from above, it will return false, which is why the *ngIf is for. Else it will show you a local reference called infoText, which is being set in the ng-template.
     if selectedRecipe is set, then set the Recipe property of the recipe-details component to whatever selectedRecipe object comes in from app-recipe-list and that's where recipe-details.component will get its values from -->
-    <app-recipe-detail
+    <!-- <app-recipe-detail
       *ngIf="selectedRecipe; else infoText"
       [recipe]="selectedRecipe">
     </app-recipe-detail>
     <ng-template #infoText>
       <p>Please select a Recipe!</p>
-    </ng-template>
-
+    </ng-template> -->
+    <router-outlet></router-outlet>
+    
   </div>
 
 </div>

@@ -1,10 +1,12 @@
 
 <!--when this link is clicked execute a method called onSelected() in this component. Go to this component.ts to see onSelected();-->
 <!--when you add routes remove all your href="#" from the page to avoid reload page-->
+<!--(click)="onSelected()"> <<< do not need that attribute after adding routing-->
 <a 
   style="cursor: pointer;"
-  class="list-group-item clearfix"
-  (click)="onSelected()">
+  [routerLink]="[index]"
+  routerLinkActive="active"
+  class="list-group-item clearfix">
   <div class="pull-left">
     <h4 class="list-group-item-heading">{{ recipe.name }}</h4>
     <p class="list-group-item-text">{{ recipe.description }}</p>
