@@ -9,6 +9,8 @@ export class ShoppingListService {
   //ingredientChanged = new EventEmitter<Ingredient[]>();
   //after adding Subject 
   ingredientChanged = new Subject<Ingredient[]>();
+  //create a new Subject to listen to when editing. 
+  startedEditing = new Subject<number>();
 
   private ingredients: Ingredient[] = [
    // new Ingredient('Apple', 5),
@@ -17,6 +19,10 @@ export class ShoppingListService {
 
   getIngredients() {
     return this.ingredients.slice();//return a copy of the Ingredients array so that you do not send the exact object outside this service.
+  }
+
+  getIngredient(index: number) {
+    return this.ingredients[index];
   }
 
   addIngredient(ingredient: Ingredient) {
@@ -45,6 +51,19 @@ export class ShoppingListService {
     //this.ingredientChanged.emit(this.ingredients.slice());//once the new ingredients are added to the array, inform the service of the change by emitting and passing a copy of the new array.
 
     //after adding Subject
+    this.ingredientChanged.next(this.ingredients.slice());
+  }
+
+  updateIngredient(index: number, newIngredient: Ingredient) {
+    //update the index of that array to the new Ingredient passed from shopping-edit-component. 
+    this.ingredients[index] = newIngredient;
+    this.ingredientChanged.next(this.ingredients.slice());
+  }
+
+  deleteIngredient(index:number) {
+    //slice will remove 1 length of whatever index you give it. 1 is just saying delete 1 index after the index provided in the first argument. 
+    //so if you are deleteing element that has index of 3. So 3 would be passed into index. That's the starting point of that array, and then it would go up 1 length so it would essentially remove that 3rd index.
+    this.ingredients.splice(index,1);
     this.ingredientChanged.next(this.ingredients.slice());
   }
 
