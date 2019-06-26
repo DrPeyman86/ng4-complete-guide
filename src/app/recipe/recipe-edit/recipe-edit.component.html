@@ -1,3 +1,79 @@
-<p>
-  recipe-edit works!
-</p>
+
+    <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+
+          <button type="submit" class="btn btn-success" [disabled]="!recipeForm.valid">Save</button>
+          <button type="button" class="btn btn-danger">Cancel</button>
+
+      </div>
+
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input 
+              type="text"
+              id="name"
+              formControlName="name"
+              class="form-control">
+          </div>
+
+        <div class="form-group">
+
+            <label for="name">Image URL</label>
+            <input 
+              type="text"
+              id="imagePath"
+              formControlName="imagePath"
+              class="form-control">
+        </div>
+
+      <div class="form-group">
+            <img src="" class="img-responsive">
+      </div>
+
+      <div class="form-group">
+        <label for="name">Description</label>
+        <textarea
+          type="text"
+          id="description"
+          formControlName="description"
+          class="form-control"
+          rows="6"></textarea>
+      </div>
+
+      <!--use the formArrayName directive to bound the Ingredients array to this div so that inside the div we know we will work with the ingredients array controls -->
+      <div class="form-row">
+        <div class="form-group col-md-8" formArrayName="ingredients">
+          <div class="form-row"
+            *ngFor="let ingredientCtrl of getControls(); let i = index"
+            [formGroupName]="i"
+            style="margin-top:10px;">
+            <div class="col">
+              <input 
+                type="text"
+                class="form-control"
+                formControlName="name">
+            </div>
+            <div class="col">
+                <input 
+                type="number"
+                class="form-control"
+                formControlName="amount"
+                [pattern]="'^[1-9]+[0-9]*$'">  
+            </div>
+            <div class="col">
+                <button class="btn btn-danger">X</button>
+            </div>    
+          </div>
+          <hr>
+          <div class="form-row">
+            <button type="button"class="btn btn-success" (click)="onAddIngredient()">Add Ingredient</button>
+          </div>
+        </div>              
+      </div>
+
+
+     
+
+
+    </form>
+

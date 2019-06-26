@@ -30,6 +30,11 @@ export class RecipeListComponent implements OnInit {
   ngOnInit() {
     //get the array of all recipes by calling the service when on load. this would be the first step in getting recipes. Got to this component's html for next step.
     this.recipes = this.recipeService.getRecipes();
+
+    this.recipeService.recipeChanged
+    .subscribe((recipes: Recipe[])=>{
+      this.recipes = recipes;
+    })
   }
 
   onNewRecipe() {
