@@ -1,15 +1,17 @@
 import { Component, OnInit,/*, EventEmitter, Output */
-Output} from '@angular/core';
+Output,
+OnDestroy} from '@angular/core';
 import { Recipe } from '../recipes.model';
 import { RecipeService } from '../recipe.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-recipe-list',
   templateUrl: './recipe-list.component.html',
   styleUrls: ['./recipe-list.component.css']
 })
-export class RecipeListComponent implements OnInit {
+export class RecipeListComponent implements OnInit, OnDestroy {
   //section 10 on course removed stuff from here to services.
   // recipes: Recipe[] = [
   //   new Recipe('this is a new recipe','new recipe description','https://upload.wikimedia.org/wikipedia/commons/8/87/Ranch_Steak_Sandwich_at_Val%27s_%28744707629%29.jpg'),
@@ -17,6 +19,7 @@ export class RecipeListComponent implements OnInit {
   // ];//recipes is a type of the Recipe model. And it's an array model
   // //pass the Recipe model to the recipeWasSelected event because recipe-details.component will ultimately need the recipe
   recipes: Recipe[];
+  subscription: Subscription;
   @Output() index: number;
   //section 10 since adding services, do not need to eventEmitter anymore in this component.
   //@Output() recipeWasSelected = new EventEmitter<Recipe>();
@@ -31,7 +34,7 @@ export class RecipeListComponent implements OnInit {
     //get the array of all recipes by calling the service when on load. this would be the first step in getting recipes. Got to this component's html for next step.
     this.recipes = this.recipeService.getRecipes();
 
-    this.recipeService.recipeChanged
+    this.subscription = this.recipeService.recipeChanged
     .subscribe((recipes: Recipe[])=>{
       this.recipes = recipes;
     })
@@ -46,5 +49,9 @@ export class RecipeListComponent implements OnInit {
   //   //when the onRecipeSelected is executed, trigger an event called recipeWasSelected and send the recipe in iteration to the parent component. Parent component is recipe.component.html, go there to follow
   //   this.recipeWasSelected.emit(recipe);
   // }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 
 }

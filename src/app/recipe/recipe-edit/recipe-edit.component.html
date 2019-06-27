@@ -3,7 +3,7 @@
       <div class="form-group">
 
           <button type="submit" class="btn btn-success" [disabled]="!recipeForm.valid">Save</button>
-          <button type="button" class="btn btn-danger">Cancel</button>
+          <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
 
       </div>
 
@@ -23,11 +23,12 @@
               type="text"
               id="imagePath"
               formControlName="imagePath"
-              class="form-control">
+              class="form-control"
+              #imagePath>
         </div>
 
       <div class="form-group">
-            <img src="" class="img-responsive">
+            <img [src]="imagePath.value" class="img-responsive" height="200" width="300">
       </div>
 
       <div class="form-group">
@@ -61,7 +62,7 @@
                 [pattern]="'^[1-9]+[0-9]*$'">  
             </div>
             <div class="col">
-                <button class="btn btn-danger">X</button>
+                <button type="button" (click)="onDeleteIngredient(i)" class="btn btn-danger">X</button>
             </div>    
           </div>
           <hr>
