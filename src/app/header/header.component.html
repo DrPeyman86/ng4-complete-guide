@@ -53,22 +53,28 @@
           <a href="#" (click)="onSelect('shoppingList')">Shopping List</a>
         </li> -->
         
-        <li class="nav-item" routerLinkActive="active">
+        <li class="nav-item" routerLinkActive="active" *ngIf="isAuthenticated">
           <!--you could also send $event object as part of the argument, which will always send information about the event that was triggered by the element. onSelect('recipe',$event) for example-->
-          <a class="nav-link" routerLink="/recipes">Recipe</a>
+          <a class="nav-link" routerLink="/recipes" >Recipe</a>
         </li>
-        <li class="nav-item" routerLinkActive="active">
+        <li class="nav-item" routerLinkActive="active" *ngIf="isAuthenticated">
           <a class="nav-link" routerLink="/shopping-list">Shopping List</a>
+        </li>
+        <li class="nav-item" routerLinkActive="active" *ngIf="!isAuthenticated">
+          <a class="nav-link" routerLink="/auth">Authenticate</a>
         </li>
 
       </ul>
       <ul class="nav navbar-nav navbar-right">
-          <li class="dropdown nav-item" appDropdown>
+          <li class="nav-item" *ngIf="isAuthenticated">
+            <a class="nav-link" style="cursor: pointer;" (click)="logout()">Logout</a>
+          </li>
+          <li class="dropdown nav-item" appDropdown *ngIf="isAuthenticated">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Manage<span class="caret"></span></a>
           <!-- <a style="cursor: pointer;" class="nav-link dropdown-toggle" role="button"> -->
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item"style="cursor: pointer;">Save Data</a>
-              <a class="dropdown-item"style="cursor: pointer;">Fetch Data</a>
+              <a class="dropdown-item"style="cursor: pointer;" (click)="onSaveData()">Save Data</a>
+              <a class="dropdown-item"style="cursor: pointer;" (click)="onFetchData()">Fetch Data</a>
           </div>
         </li>
       </ul>

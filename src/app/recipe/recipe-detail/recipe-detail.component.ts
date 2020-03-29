@@ -43,7 +43,7 @@ export class RecipeDetailComponent implements OnInit {
   //step 1 would be this. where you run the function that clicked the button on html to go the shopping-list.component.
   onAddToShoppingList() {
     //call a method inside this component's service and pass the ingredients of the recipe to it.
-    //this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients);//after adding routing to this children component do not need anymore. 
+    this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients);//after adding routing to this children component do not need anymore. 
     this.router.navigate(['shopping-list'])
   }
 

@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -17,6 +17,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { RecipeStartComponent } from './recipe/recipe-start/recipe-start.component';
 import { RecipeEditComponent } from './recipe/recipe-edit/recipe-edit.component';
 import { RecipeService } from './recipe/recipe.service';
+import { AuthComponent } from './auth/auth.component';
+import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
+import { AuthInterceptorService } from './auth/auth.interceptor.service';
+import { AlertComponent } from './shared/alert/alert.component';
+import { PlaceholderDirective } from './shared/placeholder/placeholder.directive';
 
 @NgModule({
   declarations: [
@@ -30,16 +35,28 @@ import { RecipeService } from './recipe/recipe.service';
     ShoppingEditComponent,
     DropdownDirective,
     RecipeStartComponent,
-    RecipeEditComponent
+    RecipeEditComponent,
+    AuthComponent,
+    LoadingSpinnerComponent,
+    AlertComponent,
+    PlaceholderDirective
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule,
+    HttpClientModule,
     AppRoutingModule
   ],
-  providers: [ShoppingListService, RecipeService],
-  bootstrap: [AppComponent]
+  providers: [ShoppingListService, RecipeService, {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],
+  //the bootstrap component is the root component starting component. you could have other starting components
+  bootstrap: [AppComponent],
+  //entryComponents are components that should be loaded with Angular when Angular loads. 
+  //typically components when Declared throughout the application are either instantiated by a selector or when they are designated as the component
+  //when clicking on a path/routing. Since the AlertComponent is now created by programmatically calling that component, it never has neither of the 2 traditional
+  //methods of instantiating components. So the entryComponents array you can declare components that should be loaded at point of entry
+  entryComponents: [
+    AlertComponent
+  ]
 })
 export class AppModule { }

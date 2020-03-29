@@ -95,7 +95,8 @@ export class RecipeEditComponent implements OnInit {
   }
 
   onCancel() {
-    this.router.navigate(['../', {relativeTo: this.route}])//this would go up one level. relative to the path we are on. 
+    //this.router.navigate(['../', {relativeTo: this.route}])//this would go up one level. relative to the path we are on. 
+    this.router.navigateByUrl('/recipes');
   }
 
   onSubmit() {

@@ -21,18 +21,20 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
   constructor(private shoppingListService: ShoppingListService) {}
 
   ngOnInit() {
-    //this.Ingredients = this.shoppingListService.getIngredients();
+    this.Ingredients = this.shoppingListService.getIngredients();
     //section 10 - adding service. once you add an event trigger on the service, you can subscribe to the event name. so that everytime the event name is triggered, this subscribe block will
     //run adding a new Ingredient of type Ingredient[], which will then add that ingredient to this component's Ingredients array.
-    this.IngredientsSubscription = this.shoppingListService.ingredientChanged
+    this.IngredientsSubscription = this.shoppingListService.ingredientsChanged
     .subscribe(
-      (Ingredients: Ingredient[])=>{
-        this.Ingredients = Ingredients;
+      (ingredients: Ingredient[])=>{
+        //console.log(ingredients)
+        this.Ingredients = ingredients;
       }
     )
   }
 
   ngOnDestroy() {
+    //console.log('here');
     this.IngredientsSubscription.unsubscribe();
   }
 

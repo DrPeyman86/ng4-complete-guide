@@ -21,7 +21,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
 //which will then pass it to the list ingrdient component.
 //@Output() ingredientAdded = new EventEmitter<Ingredient>();
 
-  @ViewChild('f') slForm: NgForm;
+  @ViewChild('f', {static:true}) slForm: NgForm;
 
   IngEditsubscription: Subscription;
   editMode = false;
@@ -31,11 +31,13 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   constructor(private shoppingListService: ShoppingListService) {}
 
   ngOnInit() {
+    //console.log('here');
     this.IngEditsubscription = this.shoppingListService.startedEditing
     .subscribe((index: number)=>{
       this.editMode = true;
       this.editedItemIndex = index;
       this.editedItem = this.shoppingListService.getIngredient(index);
+      console.log(this.editedItem);
       this.slForm.setValue({
         name: this.editedItem.name,
         amount: this.editedItem.amount
@@ -44,6 +46,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    //console.log('here11')
     this.IngEditsubscription.unsubscribe();
   }
 
