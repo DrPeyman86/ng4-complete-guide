@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { RecipeComponent } from './recipe/recipe.component';
-import { ShoppingListComponent } from './shopping-list/shopping-list.component';
+// import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 import { RecipeStartComponent } from './recipe/recipe-start/recipe-start.component';
 import { RecipeDetailComponent } from './recipe/recipe-detail/recipe-detail.component';
 import { RecipeEditComponent } from './recipe/recipe-edit/recipe-edit.component';
@@ -20,11 +20,10 @@ const appRoutes: Routes = [
         {path: ':id', component: RecipeDetailComponent, resolve: [RecipesResolverService]},    
         {path: ':id/edit', component: RecipeEditComponent, resolve: [RecipesResolverService] }//add an edit at the end of it to define whether we are on eidt mode
     ]},
-    { path: 'shopping-list', component: ShoppingListComponent},
+    // { path: 'shopping-list', component: ShoppingListComponent},
     { path: 'auth', component: AuthComponent}
 ]
-
-@NgModule({
+ @NgModule({
     imports: [RouterModule.forRoot(appRoutes)],
     //we need to export the RouterModule because every module works on its own in ANgular. they don't communicate with each other. if you declare a component in a certain component 
     //in a certain moudle like app module , if we declare a component in some module, then we can only use it in that module and nowhere else

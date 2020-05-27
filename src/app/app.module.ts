@@ -22,6 +22,7 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
 import { AuthInterceptorService } from './auth/auth.interceptor.service';
 import { AlertComponent } from './shared/alert/alert.component';
 import { PlaceholderDirective } from './shared/placeholder/placeholder.directive';
+import { ShoppingListModule } from './shopping-list/shopping-list.module'
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { PlaceholderDirective } from './shared/placeholder/placeholder.directive
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ShoppingListModule,
   ],
   providers: [ShoppingListService, RecipeService, {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],
   //the bootstrap component is the root component starting component. you could have other starting components
