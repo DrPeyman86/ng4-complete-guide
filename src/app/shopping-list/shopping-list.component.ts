@@ -43,9 +43,9 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
   }
 
   //section 10 -- adding service. do not need to push to array here. instead use service.
-  // onIngredientAdded(ingredient: Ingredient) {
-  //   this.Ingredients.push(ingredient);
-  // }
+  onIngredientAdded(ingredient: Ingredient) {
+    this.Ingredients.push(ingredient);
+  }
 
 
 }
