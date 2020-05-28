@@ -21,7 +21,7 @@ export class AuthComponent implements OnDestroy {
     //you can pass in the type of a DOM element rather than the name of it inside of @ViewChild.
     //PlaceholderDirective is the type so @ViewChild will look for the first type of that DOM element in the DOm and use it
     //we store it in a local porperty alertHost
-    @ViewChild(PlaceholderDirective, {static: false}) alertHost: PlaceholderDirective;
+    @ViewChild(PlaceholderDirective) alertHost: PlaceholderDirective;
     private closeSub: Subscription;
 
     constructor(private authService: AuthService, private router: Router, private componentFactorResolver: ComponentFactoryResolver) {}
