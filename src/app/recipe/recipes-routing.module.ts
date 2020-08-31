@@ -12,7 +12,7 @@ import { AuthGuard } from '../auth/auth-guard';
 //import { environment } from '../../environments/environment';
 
 const recipesRoutes: Routes = [
-  { path: 'recipes', component: RecipeComponent,
+  { path: '', component: RecipeComponent,
     canActivate: [AuthGuard],
     children: [
         {path: '', component: RecipeStartComponent },

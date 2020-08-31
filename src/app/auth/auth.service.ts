@@ -4,6 +4,7 @@ import { catchError, tap } from "rxjs/operators";
 import { throwError, Subject, BehaviorSubject } from "rxjs";
 import { User } from "./user.model";
 import { Router } from "@angular/router";
+import { environment } from '../../environments/environment'
 
 export interface AuthResponseData {
     //kind: string,
@@ -38,7 +39,7 @@ export class AuthService {
         //return the observable from the post method, which you can subscribe to. subscribe to it in the component that the method is called.
         //we know the response data will be of type AuthResponseData.
         return this.http.post<AuthResponseData>(
-            'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyD9MTw6WXk0KAQDOmmsodF0zks_LBC5qgQ', 
+            'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + environment.fireBaseAPIKey, 
             {
                 email: email, 
                 password: password, 
@@ -58,7 +59,7 @@ export class AuthService {
     }
 
     login(email: string, password: string) {
-        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD9MTw6WXk0KAQDOmmsodF0zks_LBC5qgQ',
+        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + environment.fireBaseAPIKey,
             {
                 email: email,
                 password: password,

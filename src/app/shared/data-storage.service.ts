@@ -6,6 +6,8 @@ import { map, tap, take, exhaustMap } from "rxjs/operators";
 import { AuthService } from "../auth/auth.service";
 
 @Injectable({providedIn:'root'})
+//when you pass in an object providedIn:'root' you don't need to "PROVIDE" this service in the app.module providers array because this object
+//will allow this service to be used anyways in the root level, so you don't need to add it to providers array in app.module
 
 export class DataStorageService {
     constructor(private http: HttpClient, private recipeService: RecipeService, private authService: AuthService) {}

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 // import { RecipeComponent } from './recipe/recipe.component';
 // import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 // import { RecipeStartComponent } from './recipe/recipe-start/recipe-start.component';
@@ -22,10 +22,24 @@ const appRoutes: Routes = [
     //     {path: ':id/edit', component: RecipeEditComponent, resolve: [RecipesResolverService] }//add an edit at the end of it to define whether we are on eidt mode
     // ]},
     // { path: 'shopping-list', component: ShoppingListComponent},//moved to shopping-list.module
-    { path: 'auth', component: AuthComponent}
+    { path: 'auth', component: AuthComponent}, 
+    // {  
+    //     path: 'auth', 
+    //     loadChildren: './auth/auth.module#AuthModule'
+
+    // }
+    //{ path: 'recipes', loadChildren: './recipe/recipes.module#RecipesModule'}
+    { 
+        path: 'recipes',
+        loadChildren: ()=> import('./recipe/recipes.module').then(m=>m.RecipesModule)
+    },
+    { 
+        path: 'shopping-list',
+        loadChildren: ()=> import('./shopping-list/shopping-list.module').then(m=>m.ShoppingListModule)
+    }
 ]
  @NgModule({
-    imports: [RouterModule.forRoot(appRoutes)],
+    imports: [RouterModule.forRoot(appRoutes, {preloadingStrategy: PreloadAllModules})],
     //we need to export the RouterModule because every module works on its own in ANgular. they don't communicate with each other. if you declare a component in a certain component
     //in a certain moudle like app module , if we declare a component in some module, then we can only use it in that module and nowhere else
     exports: [RouterModule]//export the RouterModule so that you can export it to the app.module.ts file.

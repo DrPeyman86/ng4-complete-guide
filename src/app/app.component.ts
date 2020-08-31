@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './auth/auth.service';
+import { LoggingService } from './logging.service';
 
 @Component({
   selector: 'app-root',
@@ -14,8 +15,9 @@ export class AppComponent implements OnInit {
   // onNavigate(feature: string) {
   //   this.loadedFeature = feature;
   // }
-  constructor(private authService: AuthService){}
+  constructor(private authService: AuthService, private loggingService: LoggingService){}
   ngOnInit() {
     this.authService.autoLogin();
+    this.loggingService.printLog('Hello from app components ngOninit')
   }
 }
