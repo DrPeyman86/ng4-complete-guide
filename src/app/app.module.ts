@@ -24,6 +24,13 @@ import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
 import { LoggingService } from './logging.service';
 import { shoppingListReducer } from './shopping-list/store/shopping-list.reducer';
+import { authReducer } from './auth/store/auth.reducer';
+import * as fromApp from './store/app.reducer';
+
+//adding AuthEffects
+import { EffectsModule } from '@ngrx/effects';
+import { AuthEffects } from './auth/store/auth.effects';
+
 //import { AuthModule } from './auth/auth.module';
 
 
@@ -49,15 +56,22 @@ import { shoppingListReducer } from './shopping-list/store/shopping-list.reducer
     //RecipesModule,
     ShoppingListModule,
     //AuthModule,
-    StoreModule.forRoot({ShoppingList: shoppingListReducer}),
+    //once you add the app.reducer.ts file, you would just import everything from that reducer function into here. more cleaner to manage your stores in one file.
+    // StoreModule.forRoot({
+    //   ShoppingList: shoppingListReducer,
+    //   auth: authReducer
+    // }),
+    //replace above with this.
+    StoreModule.forRoot(fromApp.appReducer),
+    EffectsModule.forRoot([AuthEffects]),
     SharedModule,
     CoreModule
   ],
   // providers: [
-  //   ShoppingListService, 
-  //   RecipeService, 
-  //   {provide: HTTP_INTERCEPTORS, 
-  //     useClass: AuthInterceptorService, 
+  //   ShoppingListService,
+  //   RecipeService,
+  //   {provide: HTTP_INTERCEPTORS,
+  //     useClass: AuthInterceptorService,
   //     multi: true
   //   }
   // ],

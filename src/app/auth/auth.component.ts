@@ -1,10 +1,13 @@
-import { Component, ComponentFactoryResolver, ViewChild, OnDestroy } from '@angular/core';
+import { Component, ComponentFactoryResolver, ViewChild, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService, AuthResponseData } from './auth.service';
 import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { AlertComponent } from '../shared/alert/alert.component';
 import { PlaceholderDirective } from '../shared/placeholder/placeholder.directive';
+import { Store } from '@ngrx/store';
+import * as fromApp from '../store/app.reducer';
+import * as AuthActions from './store/auth.actions';
 
 
 @Component({
@@ -13,7 +16,7 @@ import { PlaceholderDirective } from '../shared/placeholder/placeholder.directiv
 })
 
 
-export class AuthComponent implements OnDestroy {
+export class AuthComponent implements OnInit, OnDestroy {
     isLoginMode = true;
     isLoading = false;
     error: string = null;
@@ -24,7 +27,11 @@ export class AuthComponent implements OnDestroy {
     @ViewChild(PlaceholderDirective) alertHost: PlaceholderDirective;
     private closeSub: Subscription;
 
-    constructor(private authService: AuthService, private router: Router, private componentFactorResolver: ComponentFactoryResolver) {}
+    constructor(private authService: AuthService,
+      private router: Router,
+      private componentFactorResolver: ComponentFactoryResolver,
+      private store: Store<fromApp.AppState>
+      ) {}
 
     onSwitchMode() {
         this.isLoginMode = !this.isLoginMode;//reverse the boolean
@@ -41,10 +48,16 @@ export class AuthComponent implements OnDestroy {
 
 
         this.isLoading = true;
-        //instead of having 2 blocks of .subscribe, one for each method in the AuthService. 
-        //use a Observable property and set that observable so that you can subscribe to the observable. 
+        //instead of having 2 blocks of .subscribe, one for each method in the AuthService.
+        //use a Observable property and set that observable so that you can subscribe to the observable.
         if(this.isLoginMode) {
-            this.authObs = this.authService.login(email, password)
+            //this.authObs = this.authService.login(email, password)
+            this.store.dispatch(
+              new AuthActions.LoginStart({
+                email: email,
+                password: password
+              })
+            )
             // .subscribe((res:any)=>{
             //     console.log(res);
             //     this.isLoading = false;
@@ -67,12 +80,14 @@ export class AuthComponent implements OnDestroy {
             // })
         }
 
+        //after using the Auth Effects Store, the following code block was commented
+        /*
         this.authObs.subscribe((res:any)=>{
             console.log(res);
             this.isLoading = false;
-            //routes can be either done in the Service or here. It depends on you. 
+            //routes can be either done in the Service or here. It depends on you.
             //if you want to keep the Service file clean of any client specific routing, view, etc. you could have the routing done here.
-            //if you want to send some data to the next component that loads on whatever route you have, then maybe the service would be better. 
+            //if you want to send some data to the next component that loads on whatever route you have, then maybe the service would be better.
             this.router.navigate(['/recipes']);//adding routes
             form.reset();
         }, errorMessage => {
@@ -80,13 +95,24 @@ export class AuthComponent implements OnDestroy {
             this.error = errorMessage;
             this.showErrorAlert(errorMessage);
             this.isLoading = false;
-        })
+        })*/
     }
 
     onHandleError() {
         //all needed here is to reset the error back to null, so that no error exists on page. which would remove the app-alert selector since that
         //looks for if error exists.
         this.error = null;
+    }
+
+    //after adding Auth Effects. you should subscribe to the 'auth' state, which is an observable.
+    ngOnInit() {
+      this.store.select('auth').subscribe(authState=>{
+        this.isLoading = authState.loading;//we added a property to the auth effects so that we would know when the app is loading or not.
+        this.error = authState.authError;//we added a  property to auth effects so we would know the error that comes back from the auth.reducer.
+        if(this.error) {
+          this.showErrorAlert(this.error);
+        }
+      });
     }
 
     ngOnDestroy() {
@@ -98,16 +124,16 @@ export class AuthComponent implements OnDestroy {
 
     //create an alert by instantiating the alert component
     private showErrorAlert(message: string) {
-        //the below line is a valid Typescript code and will not throw error, however it will not work with Angular. 
+        //the below line is a valid Typescript code and will not throw error, however it will not work with Angular.
         //Angular does more than just creating an object when Angular instantiates a component, it needs to compile it up to change detection into the DOM
-        //This would be a normal Javascript object, but that is not what Angular needs. 
+        //This would be a normal Javascript object, but that is not what Angular needs.
         //const alertComp = new AlertComponent();
 
-        //instead you need to let Angular create the Alert Component. Angular gives you a tool, the Angular Component Factory. 
-        //once you import the ComponentFactoryResolver in the constructor. You can then use it to build a component. 
+        //instead you need to let Angular create the Alert Component. Angular gives you a tool, the Angular Component Factory.
+        //once you import the ComponentFactoryResolver in the constructor. You can then use it to build a component.
         //you pass in the Component as an argument and you do not need to instantiate it by the "new" keyword. You just tell it
         //where the component is which you want the componentFactory to create for you
-        //the method will return a ComponentFactory type. So you can set it to a local variable. 
+        //the method will return a ComponentFactory type. So you can set it to a local variable.
         //The variable will not be the component itself, but the FACTORY. So this becomes an object that knows how to create alert
         //component. With the factory, you can create a concrete component, but for that, we need to palce where we can attach it in our
         //DOM. We need to tell Angular where we want to add this component.
@@ -120,31 +146,31 @@ export class AuthComponent implements OnDestroy {
         //the public .viewContainerRef comes from the placeHolderDirective host, which there we created a public viewContainerRef property
         const hostViewContainerRef = this.alertHost.viewContainerRef;
         //clear any previous references that may have existed before
-        //because viewContainerRef is not just a place where something should be display in the DOM, instead it is an object that allows you to interact with that 
+        //because viewContainerRef is not just a place where something should be display in the DOM, instead it is an object that allows you to interact with that
         //place in the DOM and clear simply clears all Angular components that have been rendered in that place before. So we want to clear everything before
         //we render something new
         hostViewContainerRef.clear();
 
-        //now need the referene of the FACTORY of the component we want to create. 
+        //now need the referene of the FACTORY of the component we want to create.
         // hostViewContainerRef.createComponent(alertCmpFactory);
 
-        //now to adding message and close ability to the alertComponent. Need to create a reference of that component locally. 
+        //now to adding message and close ability to the alertComponent. Need to create a reference of that component locally.
         const alertComponentRef = hostViewContainerRef.createComponent(alertCmpFactory);
         //now you can interact with the AlertComponent
 
-        //instance property which gives you access to the concerete instance of this component that was created here and this instance should have the 
-        //properties defined in AlertComponent. 
-        //now you can simply set the property message of the AlertComponent to the error message we received here in this function above. 
+        //instance property which gives you access to the concerete instance of this component that was created here and this instance should have the
+        //properties defined in AlertComponent.
+        //now you can simply set the property message of the AlertComponent to the error message we received here in this function above.
         alertComponentRef.instance.message = message;
         //since this is a component where it has an @Output() where it has an EventEmitted(), we want to manually Subscribe() to it. Which is an expection
-        //where you would not otherwise be able to subscribe(). 
+        //where you would not otherwise be able to subscribe().
         this.closeSub = alertComponentRef.instance.close.subscribe(()=>{
             this.closeSub.unsubscribe();
             hostViewContainerRef.clear();
         });
-        
+
 
     }
 
 
-} 
+}

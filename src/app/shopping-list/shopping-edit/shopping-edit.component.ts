@@ -5,9 +5,10 @@ import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-//import everything from the shopping-list-reducer. 
-//it is a naming convention to use "from" in front of it to signify that it is "from" a store or state. 
+//import everything from the shopping-list-reducer.
+//it is a naming convention to use "from" in front of it to signify that it is "from" a store or state.
 import * as fromShoppingList from '../store/shopping-list.reducer';
+import * as fromApp from '../../store/app.reducer';
 
 import * as ShoppingListActions from '../store/shopping-list.actions';
 
@@ -39,12 +40,12 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
     private shoppingListService: ShoppingListService
     // , private store: Store<{ShoppingList: {ingredients: Ingredient[]}}>
     //
-    , private store: Store<fromShoppingList.AppState>
+    , private store: Store<fromApp.AppState>
     ) {}
 
   ngOnInit() {
     //console.log('here');
-    
+
     // this.IngEditsubscription = this.shoppingListService.startedEditing
     // .subscribe((index: number)=>{
     //   this.editMode = true;
@@ -57,16 +58,16 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
     //     amount: this.editedItem.amount
     //   })
     // })
-    //once you start using the Store you can comment out the entire block code above with below. 
-    //you can .subscribe() to the store.select('ShoppingList') observable. 
-    this.IngEditsubscription = this.store.select('ShoppingList').subscribe(stateData=>{
-      //check to make sure the editedIngredientIndex is greater than -1 because -1 is the initial state value and it does not 
-      //define an edit mode. so if it is -1, then edit mode would be false. 
+    //once you start using the Store you can comment out the entire block code above with below.
+    //you can .subscribe() to the store.select('ShoppingList') observable.
+    this.IngEditsubscription = this.store.select('shoppingList').subscribe(stateData=>{
+      //check to make sure the editedIngredientIndex is greater than -1 because -1 is the initial state value and it does not
+      //define an edit mode. so if it is -1, then edit mode would be false.
       if(stateData.editedIngredientIndex > -1) {
         this.editMode = true;
         this.editedItem = stateData.editedIngredient;
 
-        //you don't need to store the index here anymore since the store already knows the index of the ingredient we are editing. 
+        //you don't need to store the index here anymore since the store already knows the index of the ingredient we are editing.
         //this.editedItemIndex = stateData.editedIngredientIndex;
         this.slForm.setValue({
           name: this.editedItem.name,
@@ -93,9 +94,9 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   }
 
   onDelete() {
-    //once you add the "Store" you can comment the line below to remove the service from being used. 
+    //once you add the "Store" you can comment the line below to remove the service from being used.
     // this.shoppingListService.deleteIngredient(this.editedItemIndex);
-    //once you remove redundant code, you can remove the index of the item you are trying to delete as part of the payload because the index is managed by the store itself. 
+    //once you remove redundant code, you can remove the index of the item you are trying to delete as part of the payload because the index is managed by the store itself.
     // this.store.dispatch(new ShoppingListActions.DeleteIngredient(this.editedItemIndex))
     this.store.dispatch(new ShoppingListActions.DeleteIngredient())
     this.onClear();
@@ -116,21 +117,21 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
     this.shoppingListService.addIngredient(newIngredient);
     */
 
-    //V2 - once adding TD approach to the form do following instead of above. 
+    //V2 - once adding TD approach to the form do following instead of above.
     const value = form.value;
     const newIngredient = new Ingredient(value.name, value.amount);
     if (this.editMode) {
-      //once you add the "Store" you can comment the line below to remove the service from being used. 
+      //once you add the "Store" you can comment the line below to remove the service from being used.
       // this.shoppingListService.updateIngredient(this.editedItemIndex, newIngredient)
       // this.store.dispatch(new ShoppingListActions.UpdateIngredient({
-      //   index: this.editedItemIndex, 
+      //   index: this.editedItemIndex,
       //   ingredient: newIngredient
       // }))
 
-      //once you start using the Store and editing it that way, you don't need the index to be passed onto the UpgradeIngreint() action anymore because the store already knows 
-        //the index of the ingredient we are editing. so it's redundant. 
-        //index: this.editedItemIndex, 
-        //replace code above. 
+      //once you start using the Store and editing it that way, you don't need the index to be passed onto the UpgradeIngreint() action anymore because the store already knows
+        //the index of the ingredient we are editing. so it's redundant.
+        //index: this.editedItemIndex,
+        //replace code above.
       this.store.dispatch(new ShoppingListActions.UpdateIngredient(newIngredient))
     } else {
       //after adding the Store method. comment line below
@@ -139,14 +140,14 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
 
       //new store method
       //need to add the ShoppingListActions ts file to be able access the different classes which are different action items
-      //we need a way to send the payload to the class's constructor. for that, you need to add a constructor to the class, which would accept a payload argument. 
-      //go to shopping-list.actions.ts now in the AddIngredient and see constructor function. That payload argument, made it possible to send the entire object 
-      //as the payload to that AddIngredient class. 
+      //we need a way to send the payload to the class's constructor. for that, you need to add a constructor to the class, which would accept a payload argument.
+      //go to shopping-list.actions.ts now in the AddIngredient and see constructor function. That payload argument, made it possible to send the entire object
+      //as the payload to that AddIngredient class.
       this.store.dispatch(new ShoppingListActions.AddIngredient(newIngredient))
     }
     this.editMode = false;
     form.reset();
-    
+
 
   }
 

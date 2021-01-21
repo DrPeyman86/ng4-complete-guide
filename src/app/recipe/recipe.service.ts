@@ -6,9 +6,10 @@ import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as ShoppingListActions from '../shopping-list/store/shopping-list.actions';
 
-//import everything from the shopping-list-reducer. 
-//it is a naming convention to use "from" in front of it to signify that it is "from" a store or state. 
+//import everything from the shopping-list-reducer.
+//it is a naming convention to use "from" in front of it to signify that it is "from" a store or state.
 import * as fromShoppingList from '../shopping-list/store/shopping-list.reducer';
+import * as fromApp from '../store/app.reducer';
 
 @Injectable()//you could use this sytax to make this service available in the root directory level of the app so that all compoents can utlize this service
 //rather than providing this service in the "providers" array of the component you want this service. It would either be app.module.ts "providers" or see recipe.component.ts where it
@@ -42,24 +43,24 @@ export class RecipeService {
     private shoppingListService: ShoppingListService
      // , private store: Store<{ShoppingList: {ingredients: Ingredient[]}}>
     //
-    , private store: Store<fromShoppingList.AppState>
+    , private store: Store<fromApp.AppState>
   ){}
 
-  //once you add HTTP into the application, need a way to basically overwrite current local recipes with what is in the database. 
+  //once you add HTTP into the application, need a way to basically overwrite current local recipes with what is in the database.
   //setRecipes gets called from data-storage.service.ts when we click "Fetch Recipes"
   setRecipes(recipes: Recipe[]){
     this.recipes = recipes;
     this.recipeChanged.next(this.recipes.slice())//since the recipes changed and we have observable, use the next() to emit an event, which will then trigger a change method on every component that is subscribing to the recipeChanged subject.
-    //and pass in a COPY version of the recipes array be using slice(). 
+    //and pass in a COPY version of the recipes array be using slice().
   }
 
   getRecipes() {
     return this.recipes.slice();//don't return the array itself since arrays are reference types and this would return the direct reference to this array. slice() will return a new array which will copy the exact array.
   }
 
-  //after we add children routing, we need a way of selecting a single recipe to be used for the recipe-detail.component. So need to implement below method. 
+  //after we add children routing, we need a way of selecting a single recipe to be used for the recipe-detail.component. So need to implement below method.
   getRecipe(index: number) {
-    return this.recipes.slice()[index];//you could use .slice() to copy a new array of the recipes array and send that instead of copying the referenced type array recipes. 
+    return this.recipes.slice()[index];//you could use .slice() to copy a new array of the recipes array and send that instead of copying the referenced type array recipes.
   }
 
   //step 2 -- you would get the array of Ingredients here.
@@ -67,14 +68,14 @@ export class RecipeService {
     //step 3 - inject the shoppingListService by using the @Injectable() in this service. since the @INjectable() root was already used here in this service, it will work.
     //console.log(ingredients);
 
-    //once you start using "Store" rather than service to handle your data, you would comment this line below. 
+    //once you start using "Store" rather than service to handle your data, you would comment this line below.
     // this.shoppingListService.addIngredients(ingredients);
-    //you would import the store in private argument above. 
-    //the type of the Store<> would be the same thing as in ShoppingList.component.ts. 
-    //you would then dispatch an action. It would be a new instance of that class. so you would put new. 
+    //you would import the store in private argument above.
+    //the type of the Store<> would be the same thing as in ShoppingList.component.ts.
+    //you would then dispatch an action. It would be a new instance of that class. so you would put new.
     //you then need to import the available Actions, so ShoppingLIstActions. Import that from above.
-    //then you would get available classes you could call to handle your action. In this case 
-    //we want AddIngredients because we are adding many ingredients to the shoppingLIstComponent. 
+    //then you would get available classes you could call to handle your action. In this case
+    //we want AddIngredients because we are adding many ingredients to the shoppingLIstComponent.
     this.store.dispatch(new ShoppingListActions.AddIngredients(ingredients));
   }
   addRecipe(recipe: Recipe) {
@@ -83,7 +84,7 @@ export class RecipeService {
   }
 
   updateRecipe(index: number, newRecipe: Recipe) {
-    this.recipes[index] = newRecipe;//change the index of the current recipes array to whatever was passed in as the newRecipe 
+    this.recipes[index] = newRecipe;//change the index of the current recipes array to whatever was passed in as the newRecipe
     this.recipeChanged.next(this.recipes.slice());
   }
 
